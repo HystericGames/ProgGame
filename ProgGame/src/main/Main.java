@@ -6,15 +6,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		JFrame window  = new JFrame("Shooter Game");
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //test777withpasswd
-	
-		window.setContentPane(new GamePanel());
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		GamePanel panel = new GamePanel();
+		window.setContentPane(panel);
 		window.pack();
 		window.setResizable(false);
 		window.setVisible(true);
 		window.pack();
-		//test
-		
 	} 
 
 }

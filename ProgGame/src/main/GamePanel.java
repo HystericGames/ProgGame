@@ -1,50 +1,83 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import player.Player;
 
-public class GamePanel extends JPanel {
-    private static final long serialVersionUID = -6830395646660633218L;
+public class GamePanel extends JPanel implements KeyListener, Runnable {
+    private static final long serialVersionUID = 1L;
 
-    private Color bgColor;
+    public static int WIDTH = 1080;
+    public static int HEIGHT = 720;
+
+    private Thread thread;
+    private boolean running;
+
+    private BufferedImage image;
     private Graphics2D g;
-    private Image image;
+
     private Player player;
 
-    public static int WIDTH;
-    public static int HEIGHT;
+    private int FPS = 60;
+    private long targetTime = 1000 / FPS;
 
     public GamePanel() {
-        bgColor = new Color(255, 255, 255);
-        setBackground(bgColor);
-
-        WIDTH = 1080;
-        HEIGHT = 720;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g = (Graphics2D) image.getGraphics();
-
-        player = new Player();
-        
-        run();
+        setFocusable(true);
+        requestFocusInWindow();
+        addKeyListener(this);
+        setBackground(Color.WHITE);
     }
 
+    public void addNotify() {
+        super.addNotify();
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
+    }
+
+    private void init() {
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        g = (Graphics2D) image.getGraphics();
+        player = new Player();
+        running = true;
+    }
+
+    @Override
     public void run() {
-        render();
-        repaint();
+        init();
+        long start, elapsed, wait;
+
+        while (running) {
+            start = System.nanoTime();
+
+            update();
+            render();
+            repaint();
+
+            elapsed = System.nanoTime() - start;
+            wait = targetTime - elapsed / 1_000_000;
+
+            if (wait < 0) wait = 5;
+
+            try {
+                Thread.sleep(wait);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void update() {
+        player.update();
     }
 
     private void render() {
-        g.setColor(bgColor);
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         player.draw(g);
     }
@@ -54,4 +87,25 @@ public class GamePanel extends JPanel {
         super.paintComponent(gPanel);
         gPanel.drawImage(image, 0, 0, null);
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int input = e.getKeyCode();
+        if (input == KeyEvent.VK_LEFT) player.setLeft(true);
+        if (input == KeyEvent.VK_RIGHT) player.setRight(true);
+        if (input == KeyEvent.VK_UP) player.setUp(true);
+        if (input == KeyEvent.VK_DOWN) player.setDown(true);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int input = e.getKeyCode();
+        if (input == KeyEvent.VK_LEFT) player.setLeft(false);
+        if (input == KeyEvent.VK_RIGHT) player.setRight(false);
+        if (input == KeyEvent.VK_UP) player.setUp(false);
+        if (input == KeyEvent.VK_DOWN) player.setDown(false);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
 }
