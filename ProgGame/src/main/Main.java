@@ -6,7 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		JFrame window  = new JFrame("Shooter Game");
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //test777
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //test777withpasswd
+	
 		window.setContentPane(new GamePanel());
 		window.pack();
 		window.setResizable(false);
