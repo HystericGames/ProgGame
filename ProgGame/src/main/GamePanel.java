@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
+import enemies.Enemy;
 import player.Player;
 
 public class GamePanel extends JPanel implements KeyListener, Runnable {
@@ -20,6 +21,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     private Graphics2D g;
 
     private Player player;
+    private Enemy enemy;
 
     private int FPS = 60;
     private long targetTime = 1000 / FPS;
@@ -44,6 +46,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         g = (Graphics2D) image.getGraphics();
         player = new Player();
+        enemy = new Enemy(1, 1, player);
         running = true;
     }
 
@@ -74,12 +77,14 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 
     private void update() {
         player.update();
+        enemy.update();
     }
 
     private void render() {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         player.draw(g);
+        enemy.draw(g);
     }
 
     @Override

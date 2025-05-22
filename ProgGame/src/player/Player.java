@@ -30,9 +30,15 @@ public class Player{
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
+    	g.setColor(color);
+    	g.fillRect(x, y, width, height);
+
+    	g.setColor(Color.GRAY);
+    	g.drawLine(x, y, x + width, y + height);
+    	g.drawLine(x + width, y, x, y + height);
+
     }
+
     
     public void update() {
     	if(left) dx = -speed;
@@ -41,10 +47,10 @@ public class Player{
 		if(down) dy = speed;
 		x+=dx;
 		y+=dy;
-		if(x < 2) x = 1;
-		if(y < 2) y = 1;
-		if(x > GamePanel.WIDTH - 2*10-3) x = GamePanel.WIDTH - 2*10-3;
-		if(y > GamePanel.HEIGHT - 2*10-3) y = GamePanel.HEIGHT - 2*10-3;
+		if(x < 3) x = 3;
+		if(y < 3) y = 3;
+		if(x > GamePanel.WIDTH - 50-3) x = GamePanel.WIDTH - 50-3; //Drei Pixel Kanten abstand
+		if(y > GamePanel.HEIGHT - 50-3) y = GamePanel.HEIGHT - 50-3;
 		dx=0;
 		dy=0;
     }
