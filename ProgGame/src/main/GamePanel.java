@@ -7,10 +7,11 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import enemies.Enemy;
+import enemies.*;
 import player.Player;
+import player.Weapon;
 
-public class GamePanel extends JPanel implements KeyListener, Runnable {
+public class GamePanel extends JPanel implements KeyListener, Runnable, MouseListener {
 
 	private static final long serialVersionUID = -452762559258401813L;
 	public static int WIDTH = 1080;
@@ -24,18 +25,19 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 
 	private Player player;
 	private ArrayList<Enemy> enemies;
+	private ArrayList<Weapon> bullets;
 
 	private int FPS = 60;
 	private long targetTime = 1000 / FPS;
 
 	private int waveNumber;
-	private int waveSize;
 
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		requestFocusInWindow();
 		addKeyListener(this);
+		addMouseListener(this);
 		setBackground(Color.WHITE);
 	}
 
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		g = (Graphics2D) image.getGraphics();
 		player = new Player();
 		enemies = new ArrayList<Enemy>();
+		bullets = new ArrayList<>();
 		waveNumber = 0;
 
 		running = true;
@@ -89,19 +92,27 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
 		}
-
 		if (enemies.size() == 0) {
 			waveNumber++;
 			spawnEnemies(waveNumber * 3);
 		}
+		
+		for (int i = 0; i < bullets.size(); i++) {
+			if (bullets.get(i).update()) {
+				bullets.remove(i);
+				i--;
+			}
+		}
+
 
 	}
 
 	private void spawnEnemies(int count) {
 		for (int i = 0; i < count; i++) {
-			enemies.add(new Enemy(1, 1, player));
+			enemies.add(new EnemyHandler(player).createRandomEnemy());
 		}
 	}
+
 
 	private void render() {
 		g.setColor(Color.WHITE);
@@ -110,6 +121,10 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).draw(g);
 		}
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).draw(g);
+		}
+
 	}
 
 	@Override
@@ -121,30 +136,61 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int input = e.getKeyCode();
-		if (input == KeyEvent.VK_LEFT)
+		if (input == KeyEvent.VK_A)
 			player.setLeft(true);
-		if (input == KeyEvent.VK_RIGHT)
+		if (input == KeyEvent.VK_D)
 			player.setRight(true);
-		if (input == KeyEvent.VK_UP)
+		if (input == KeyEvent.VK_W)
 			player.setUp(true);
-		if (input == KeyEvent.VK_DOWN)
+		if (input == KeyEvent.VK_S)
 			player.setDown(true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int input = e.getKeyCode();
-		if (input == KeyEvent.VK_LEFT)
+		if (input == KeyEvent.VK_A)
 			player.setLeft(false);
-		if (input == KeyEvent.VK_RIGHT)
+		if (input == KeyEvent.VK_D)
 			player.setRight(false);
-		if (input == KeyEvent.VK_UP)
+		if (input == KeyEvent.VK_W)
 			player.setUp(false);
-		if (input == KeyEvent.VK_DOWN)
+		if (input == KeyEvent.VK_S)
 			player.setDown(false);
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		int mouseX = e.getX();
+		int mouseY = e.getY();
+
+		int playerCenterX = player.getX() + player.getWidth() / 2;
+		int playerCenterY = player.getY() + player.getHeight() / 2;
+		double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
+
+		bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
+	}
+
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 }

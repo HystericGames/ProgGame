@@ -7,22 +7,31 @@ import java.awt.geom.AffineTransform;
 import main.GamePanel;
 import player.Player;
 
-public class Enemy {
-    private double x, y;
-    private double dx, dy;
-    private int width, height;
-    private Color color;
-    private int speed;
+public abstract class Enemy {
+    protected double x, y;
+    protected double dx, dy;
+    protected int width, height;
+    protected Color enemyColor;
+    protected Color enemyBoundaryColor;
+    protected int speed;
+    
+    protected int type;
+    protected int rank;
+    
+    protected boolean dead;
+    protected int health;
 
     private Player player;
 
     public Enemy(int type, int rank, Player player) {
     	this.player = player;
-        width = 60;
-        height = 40;
-        speed = 3;
-        color = Color.RED;
+        this.type = type;
+        this.rank = rank;
+        
+        this.width = 40; 
+        this.height = 40;
 
+        // Random spawn
         int side = (int)(Math.random() * 4);
         switch (side) {
             case 0:
@@ -42,7 +51,6 @@ public class Enemy {
                 y = Math.random() * GamePanel.HEIGHT;
                 break;
         }
-
         dx = dy = 0;
     }
 
@@ -66,7 +74,7 @@ public class Enemy {
         g.translate(x + width / 2.0, y + height / 2.0);
         g.rotate(angle);
 
-        g.setColor(color);
+        g.setColor(enemyColor);
         g.fillRect(-width / 2, -height / 2, width, height);
 
         g.setTransform(old);
