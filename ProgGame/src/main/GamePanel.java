@@ -3,114 +3,148 @@ package main;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import enemies.Enemy;
 import player.Player;
 
 public class GamePanel extends JPanel implements KeyListener, Runnable {
-    private static final long serialVersionUID = 1L;
 
-    public static int WIDTH = 1080;
-    public static int HEIGHT = 720;
+	private static final long serialVersionUID = -452762559258401813L;
+	public static int WIDTH = 1080;
+	public static int HEIGHT = 720;
 
-    private Thread thread;
-    private boolean running;
+	private Thread thread;
+	private boolean running;
 
-    private BufferedImage image;
-    private Graphics2D g;
+	private BufferedImage image;
+	private Graphics2D g;
 
-    private Player player;
-    private Enemy enemy;
+	private Player player;
+	private ArrayList<Enemy> enemies;
 
-    private int FPS = 60;
-    private long targetTime = 1000 / FPS;
+	private int FPS = 60;
+	private long targetTime = 1000 / FPS;
 
-    public GamePanel() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setFocusable(true);
-        requestFocusInWindow();
-        addKeyListener(this);
-        setBackground(Color.WHITE);
-    }
+	private int waveNumber;
+	private int waveSize;
 
-    public void addNotify() {
-        super.addNotify();
-        if (thread == null) {
-            thread = new Thread(this);
-            thread.start();
-        }
-    }
+	public GamePanel() {
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setFocusable(true);
+		requestFocusInWindow();
+		addKeyListener(this);
+		setBackground(Color.WHITE);
+	}
 
-    private void init() {
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g = (Graphics2D) image.getGraphics();
-        player = new Player();
-        enemy = new Enemy(1, 1, player);
-        running = true;
-    }
+	public void addNotify() {
+		super.addNotify();
+		if (thread == null) {
+			thread = new Thread(this);
+			thread.start();
+		}
+	}
 
-    @Override
-    public void run() {
-        init();
-        long start, elapsed, wait;
+	private void init() {
+		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		g = (Graphics2D) image.getGraphics();
+		player = new Player();
+		enemies = new ArrayList<Enemy>();
+		waveNumber = 0;
 
-        while (running) {
-            start = System.nanoTime();
+		running = true;
+	}
 
-            update();
-            render();
-            repaint();
+	@Override
+	public void run() {
+		init();
+		long start, elapsed, wait;
 
-            elapsed = System.nanoTime() - start;
-            wait = targetTime - elapsed / 1_000_000;
+		while (running) {
+			start = System.nanoTime();
 
-            if (wait < 0) wait = 5;
+			update();
+			render();
+			repaint();
 
-            try {
-                Thread.sleep(wait);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			elapsed = System.nanoTime() - start;
+			wait = targetTime - elapsed / 1_000_000;
 
-    private void update() {
-        player.update();
-        enemy.update();
-    }
+			if (wait < 0)
+				wait = 5;
 
-    private void render() {
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-        player.draw(g);
-        enemy.draw(g);
-    }
+			try {
+				Thread.sleep(wait);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    @Override
-    protected void paintComponent(Graphics gPanel) {
-        super.paintComponent(gPanel);
-        gPanel.drawImage(image, 0, 0, null);
-    }
+	private void update() {
+		player.update();
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int input = e.getKeyCode();
-        if (input == KeyEvent.VK_LEFT) player.setLeft(true);
-        if (input == KeyEvent.VK_RIGHT) player.setRight(true);
-        if (input == KeyEvent.VK_UP) player.setUp(true);
-        if (input == KeyEvent.VK_DOWN) player.setDown(true);
-    }
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).update();
+		}
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int input = e.getKeyCode();
-        if (input == KeyEvent.VK_LEFT) player.setLeft(false);
-        if (input == KeyEvent.VK_RIGHT) player.setRight(false);
-        if (input == KeyEvent.VK_UP) player.setUp(false);
-        if (input == KeyEvent.VK_DOWN) player.setDown(false);
-    }
+		if (enemies.size() == 0) {
+			waveNumber++;
+			spawnEnemies(waveNumber * 3);
+		}
 
-    @Override
-    public void keyTyped(KeyEvent e) {}
+	}
+
+	private void spawnEnemies(int count) {
+		for (int i = 0; i < count; i++) {
+			enemies.add(new Enemy(1, 1, player));
+		}
+	}
+
+	private void render() {
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		player.draw(g);
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).draw(g);
+		}
+	}
+
+	@Override
+	protected void paintComponent(Graphics gPanel) {
+		super.paintComponent(gPanel);
+		gPanel.drawImage(image, 0, 0, null);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int input = e.getKeyCode();
+		if (input == KeyEvent.VK_LEFT)
+			player.setLeft(true);
+		if (input == KeyEvent.VK_RIGHT)
+			player.setRight(true);
+		if (input == KeyEvent.VK_UP)
+			player.setUp(true);
+		if (input == KeyEvent.VK_DOWN)
+			player.setDown(true);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int input = e.getKeyCode();
+		if (input == KeyEvent.VK_LEFT)
+			player.setLeft(false);
+		if (input == KeyEvent.VK_RIGHT)
+			player.setRight(false);
+		if (input == KeyEvent.VK_UP)
+			player.setUp(false);
+		if (input == KeyEvent.VK_DOWN)
+			player.setDown(false);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
 }
