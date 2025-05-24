@@ -78,7 +78,7 @@ public class Infantry extends Enemy{
         double angle = Math.atan2(dy, dx);
         AffineTransform old = g.getTransform();
 
-        g.translate(x + width / 2.0, y + height / 2.0);
+        g.translate(getX() + width / 2.0, getY() + height / 2.0);
         g.rotate(angle);
 
         // Fill main body

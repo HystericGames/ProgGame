@@ -3,6 +3,7 @@ package player;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import main.GamePanel;
 
@@ -79,5 +80,10 @@ public class Weapon {
 		// Restore old transform
 		g.setTransform(old);
 	}
+	
+	public Rectangle getBounds() {
+	    return new Rectangle(x - width / 2, y - height / 2, width, height);
+	}
+
 
 }

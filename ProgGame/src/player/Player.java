@@ -49,7 +49,7 @@ public class Player{
 		y+=dy;
 		if(x < 3) x = 3;
 		if(y < 3) y = 3;
-		if(x > GamePanel.WIDTH - 50-3) x = GamePanel.WIDTH - 50-3; //Drei Pixel Kanten abstand
+		if(x > GamePanel.WIDTH - 50-3) x = GamePanel.WIDTH - 50-3;
 		if(y > GamePanel.HEIGHT - 50-3) y = GamePanel.HEIGHT - 50-3;
 		dx=0;
 		dy=0;
