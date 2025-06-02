@@ -19,6 +19,10 @@ public class Player{
 
 	private int dx;
 	private int dy;
+	
+	private int health;
+    private int maxHealth;
+
 
     public Player() {
     	x = GamePanel.WIDTH/2;
@@ -27,17 +31,27 @@ public class Player{
         height = 50;
         color = Color.BLACK;
         speed = 6;
+        
+        maxHealth = 5;
+        health = maxHealth;
     }
 
     public void draw(Graphics2D g) {
-    	g.setColor(color);
-    	g.fillRect(x, y, width, height);
+        g.setColor(color);
+        g.fillRect(x, y, width, height);
 
-    	g.setColor(Color.GRAY);
-    	g.drawLine(x, y, x + width, y + height);
-    	g.drawLine(x + width, y, x, y + height);
+        g.setColor(Color.GRAY);
+        g.fillRect(x, y - 15, width, 8);
 
+        g.setColor(Color.RED);
+        int healthBarWidth = (int) ((health / (double) maxHealth) * width);
+        g.fillRect(x, y - 15, healthBarWidth, 8);
+        
+        g.setColor(Color.DARK_GRAY);
+        g.drawLine(x, y, x + width, y + height);
+        g.drawLine(x + width, y, x, y + height);
     }
+
 
     
     public void update() {
@@ -53,6 +67,11 @@ public class Player{
 		if(y > GamePanel.HEIGHT - 50-3) y = GamePanel.HEIGHT - 50-3;
 		dx=0;
 		dy=0;
+    }
+    
+    public void damage(int amount) {
+    	health -= amount;
+        if (health < 0) health = 0;
     }
 
 	public int getX() {
@@ -150,7 +169,27 @@ public class Player{
 	public void setDy(int dy) {
 		this.dy = dy;
 	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public boolean isDead() {
+		return health <= 0;
+	}
     
-    
+	
 
 }

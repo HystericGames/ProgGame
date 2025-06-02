@@ -22,6 +22,8 @@ public abstract class Enemy {
     
     protected boolean dead;
     protected int health;
+    
+    protected int damage;
 
     private Player player;
 
@@ -142,6 +144,14 @@ public abstract class Enemy {
 
 	public void setRank(int rank) {
 		this.rank = rank;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 	
 	

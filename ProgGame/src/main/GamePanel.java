@@ -165,6 +165,18 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		    }
 		}
 
+		for (int i = 0; i < enemies.size(); i++) {
+		    Enemy e = enemies.get(i);
+		    if (playerCollision(e)) {
+		        player.damage(enemies.get(i).getDamage());
+		        enemies.remove(i);
+		        i--;
+
+		        if (player.isDead()) {
+		            running = false;
+		        }
+		    }
+		}
 
 
 	}
@@ -174,21 +186,46 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 			enemies.add(new EnemyHandler(player).createRandomEnemy());
 		}
 	}
+	
+	private boolean playerCollision(Enemy e) {
+	    Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+	    return playerRect.intersects(e.getBounds());
+	}
+
 
 
 	private void render() {
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
-		player.draw(g);
-		for (int i = 0; i < enemies.size(); i++) {
-			enemies.get(i).draw(g);
-		}
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).draw(g);
-		}
-		g.setColor(Color.BLACK);
-		g.drawString("Score: " + score, 20, 30);
+	    g.setColor(Color.WHITE);
+	    g.fillRect(0, 0, WIDTH, HEIGHT);
+
+	    if (!player.isDead()) {
+	        player.draw(g);
+	        for (Enemy enemy : enemies) {
+	            enemy.draw(g);
+	        }
+	        for (Weapon bullet : bullets) {
+	            bullet.draw(g);
+	        }
+	        g.setColor(Color.BLACK);
+	        g.drawString("Score: " + score, 20, 30);
+	    } else {
+	        drawGameOverScreen();
+	    }
 	}
+	
+	private void drawGameOverScreen() {
+	    g.setColor(Color.BLACK);
+	    g.setFont(new Font("Arial", Font.BOLD, 48));
+	    String text = "Game Over";
+	    int stringWidth = g.getFontMetrics().stringWidth(text);
+	    g.drawString(text, (WIDTH - stringWidth) / 2, HEIGHT / 2 - 20);
+
+	    g.setFont(new Font("Arial", Font.PLAIN, 24));
+	    String scoreText = "Final Score: " + score;
+	    int scoreWidth = g.getFontMetrics().stringWidth(scoreText);
+	    g.drawString(scoreText, (WIDTH - scoreWidth) / 2, HEIGHT / 2 + 20);
+	}
+
 
 	@Override
 	protected void paintComponent(Graphics gPanel) {
