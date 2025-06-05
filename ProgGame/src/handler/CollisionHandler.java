@@ -1,6 +1,7 @@
-package gameloop;
+package handler;
 
 import enemy.Enemy;
+import gameloop.GamePanel;
 import player.Player;
 import player.Weapon;
 
@@ -27,7 +28,7 @@ public class CollisionHandler {
         }
     }
 
-    public static int handleBulletEnemyCollisions(List<Weapon> bullets, List<Enemy> enemies) {
+    public static int handleBulletEnemyCollisions(List<Weapon> bullets, List<Enemy> enemies, GamePanel panel) {
         int scoreGained = 0;
 
         for (int i = 0; i < bullets.size(); i++) {
@@ -49,11 +50,22 @@ public class CollisionHandler {
                     if (e.getHealth() <= 0) {
                         e.setDead(true);
                         enemies.remove(j);
+                        
+                        panel.increaseKillCount();
+
+                        // Score logic
                         if (e.getType() == 1) scoreGained += 1;
                         else if (e.getType() == 2) scoreGained += 2;
-                        else scoreGained +=3;
+                        else scoreGained += 3;
+
+                        // Medal logic
+                        if (e.getType() == 3 && e.getRank() == 2) {
+                            panel.increaseMedalCount();
+                        }
+
                         j--;
                     }
+
 
                     break;
                 }
@@ -64,7 +76,6 @@ public class CollisionHandler {
                 i--;
             }
         }
-
         return scoreGained;
     }
 

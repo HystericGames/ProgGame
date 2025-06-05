@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import enemy.*;
+import handler.*;
 import player.Player;
 import player.Weapon;
 
@@ -32,6 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private int waveNumber;
 
 	private int score = 0;
+	private int kills=0;
+	private int medals=0;
 
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -109,7 +112,7 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 		}
 
-		score += CollisionHandler.handleBulletEnemyCollisions(bullets, enemies);
+		score += CollisionHandler.handleBulletEnemyCollisions(bullets, enemies, this);
 
 		CollisionHandler.handlePlayerEnemyCollisions(player, enemies);
 
@@ -138,6 +141,8 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 			g.setColor(Color.BLACK);
 			g.drawString("Score: " + score, 20, 30);
+			g.drawString("Kills: " + kills, 20, 50);
+			g.drawString("Medals: " + medals, 20, 70);
 		} else {
 			drawGameOverScreen();
 		}
@@ -177,5 +182,31 @@ public class GamePanel extends JPanel implements Runnable {
 	public static int getHEIGHT() {
 		return HEIGHT;
 	}
+
+	public void increaseKillCount() {
+		kills++;
+	}
+
+	public void increaseMedalCount() {
+		medals++;
+	}
+
+	public int getKills() {
+		return kills;
+	}
+
+	public void setKills(int kills) {
+		this.kills = kills;
+	}
+
+	public int getMedals() {
+		return medals;
+	}
+
+	public void setMedals(int medals) {
+		this.medals = medals;
+	}
+	
+	
 
 }

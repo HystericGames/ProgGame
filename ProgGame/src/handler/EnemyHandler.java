@@ -1,4 +1,4 @@
-package gameloop;
+package handler;
 
 import enemy.*;
 import player.Player;
@@ -12,7 +12,7 @@ public class EnemyHandler {
 		this.player = player;
 	}
 
-	protected Enemy createRandomEnemy() {
+	public Enemy createRandomEnemy() {
 		int randomEnemy = (int) (Math.random() * 3) + 1;
 		int type = (int) (Math.random() * 3) + 1;
 		int rank = (int) (Math.random() * 2) + 1;
