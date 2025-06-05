@@ -2,9 +2,9 @@ package player;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
-
-import main.GamePanel;
+import gameloop.GamePanel;
 
 public class Player{
     private int x, y, width, height;
@@ -32,7 +32,7 @@ public class Player{
         color = Color.BLACK;
         speed = 6;
         
-        maxHealth = 5;
+        maxHealth = 10;
         health = maxHealth;
     }
 
@@ -72,6 +72,10 @@ public class Player{
     public void damage(int amount) {
     	health -= amount;
         if (health < 0) health = 0;
+    }
+    
+    public Rectangle getBounds() {
+        return new Rectangle((int) getX(), (int) getY(), width, height);
     }
 
 	public int getX() {

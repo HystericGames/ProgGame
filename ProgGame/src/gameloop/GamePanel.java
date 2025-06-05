@@ -1,4 +1,4 @@
-package main;
+package gameloop;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import enemies.*;
+import enemy.*;
 import player.Player;
 import player.Weapon;
 
@@ -18,20 +18,20 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 	public static int HEIGHT = 720;
 
 	private Thread thread;
-	private boolean running;
+	protected boolean running;
 
 	private BufferedImage image;
 	private Graphics2D g;
 
-	private Player player;
-	private ArrayList<Enemy> enemies;
-	private ArrayList<Weapon> bullets;
+	protected Player player;
+	public ArrayList<Enemy> enemies;
+	protected ArrayList<Weapon> bullets;
 
 	private int FPS = 60;
 	private long targetTime = 1000 / FPS;
 
 	private int waveNumber;
-	
+
 	private int score = 0;
 
 	public GamePanel() {
@@ -91,94 +91,31 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 	private void update() {
 		player.update();
 
-		for (int i = 0; i < enemies.size(); i++) {
-			enemies.get(i).update();
+		for (Enemy enemy : enemies) {
+			enemy.update();
 		}
-		if (enemies.size() == 0) {
+
+		if (enemies.isEmpty()) {
 			waveNumber++;
 			spawnEnemies(waveNumber * 3);
 		}
-		
-		// Gegner gegenseitige Kollision
-		for (int i = 0; i < enemies.size(); i++) {
-		    Enemy e1 = enemies.get(i);
-		    for (int j = i + 1; j < enemies.size(); j++) {
-		        Enemy e2 = enemies.get(j);
-		        if (e1.getBounds().intersects(e2.getBounds())) {
-		            // Simple separation logic: push away a bit
-		            double angle = Math.atan2(e2.getY() - e1.getY(), e2.getX() - e1.getX());
-		            double push = 3;
 
-		            e1.setX(e1.getX() - Math.cos(angle) * push);
-		            e1.setY(e1.getY() - Math.sin(angle) * push);
-		            e2.setX(e2.getX() + Math.cos(angle) * push);
-		            e2.setY(e2.getY() + Math.sin(angle) * push);
-		        }
-		    }
-		}
-		
+		CollisionHandler.handleEnemyCollisions(enemies);
+
 		for (int i = 0; i < bullets.size(); i++) {
 			if (bullets.get(i).update()) {
 				bullets.remove(i);
 				i--;
 			}
 		}
-		
-		for (int i = 0; i < bullets.size(); i++) {
-		    Weapon bullet = bullets.get(i);
-		    boolean removeBullet = bullet.update();
-		    
-		    Rectangle bulletRect = bullet.getBounds();
-		    
-		    for (int j = 0; j < enemies.size(); j++) {
-		        Enemy e = enemies.get(j);
-		        if (bulletRect.intersects(e.getBounds())) {
-		            e.setHealth(e.getHealth() - 1);
 
-		            double knockback = switch (e.getType()) {
-		                case 1 -> 50;
-		                case 2 -> 30;
-		                case 3 -> 10;
-		                default -> 5;
-		            };
-		            double angle = bullet.getAngle();
-		            e.setX(e.getX() + Math.cos(angle) * knockback);
-		            e.setY(e.getY() + Math.sin(angle) * knockback);
+		score += CollisionHandler.handleBulletEnemyCollisions(bullets, enemies);
 
-		            removeBullet = true;
+		CollisionHandler.handlePlayerEnemyCollisions(player, enemies);
 
-		            if (e.getHealth() <= 0) {
-		                e.setDead(true);
-		                enemies.remove(j);
-		                if (e.getType() == 1) score += 1;
-		                else if (e.getType() == 3) score += 3;
-		                j--;
-		            }
-
-		            break; 
-		        }
-		    }
-
-		    if (removeBullet) {
-		        bullets.remove(i);
-		        i--;
-		    }
+		if (player.isDead()) {
+			running = false;
 		}
-
-		for (int i = 0; i < enemies.size(); i++) {
-		    Enemy e = enemies.get(i);
-		    if (playerCollision(e)) {
-		        player.damage(enemies.get(i).getDamage());
-		        enemies.remove(i);
-		        i--;
-
-		        if (player.isDead()) {
-		            running = false;
-		        }
-		    }
-		}
-
-
 	}
 
 	private void spawnEnemies(int count) {
@@ -186,46 +123,38 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 			enemies.add(new EnemyHandler(player).createRandomEnemy());
 		}
 	}
-	
-	private boolean playerCollision(Enemy e) {
-	    Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
-	    return playerRect.intersects(e.getBounds());
-	}
-
-
 
 	private void render() {
-	    g.setColor(Color.WHITE);
-	    g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 
-	    if (!player.isDead()) {
-	        player.draw(g);
-	        for (Enemy enemy : enemies) {
-	            enemy.draw(g);
-	        }
-	        for (Weapon bullet : bullets) {
-	            bullet.draw(g);
-	        }
-	        g.setColor(Color.BLACK);
-	        g.drawString("Score: " + score, 20, 30);
-	    } else {
-	        drawGameOverScreen();
-	    }
+		if (!player.isDead()) {
+			player.draw(g);
+			for (Enemy enemy : enemies) {
+				enemy.draw(g);
+			}
+			for (Weapon bullet : bullets) {
+				bullet.draw(g);
+			}
+			g.setColor(Color.BLACK);
+			g.drawString("Score: " + score, 20, 30);
+		} else {
+			drawGameOverScreen();
+		}
 	}
-	
+
 	private void drawGameOverScreen() {
-	    g.setColor(Color.BLACK);
-	    g.setFont(new Font("Arial", Font.BOLD, 48));
-	    String text = "Game Over";
-	    int stringWidth = g.getFontMetrics().stringWidth(text);
-	    g.drawString(text, (WIDTH - stringWidth) / 2, HEIGHT / 2 - 20);
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("Arial", Font.BOLD, 48));
+		String text = "Game Over";
+		int stringWidth = g.getFontMetrics().stringWidth(text);
+		g.drawString(text, (WIDTH - stringWidth) / 2, HEIGHT / 2 - 20);
 
-	    g.setFont(new Font("Arial", Font.PLAIN, 24));
-	    String scoreText = "Final Score: " + score;
-	    int scoreWidth = g.getFontMetrics().stringWidth(scoreText);
-	    g.drawString(scoreText, (WIDTH - scoreWidth) / 2, HEIGHT / 2 + 20);
+		g.setFont(new Font("Arial", Font.PLAIN, 24));
+		String scoreText = "Final Score: " + score;
+		int scoreWidth = g.getFontMetrics().stringWidth(scoreText);
+		g.drawString(scoreText, (WIDTH - scoreWidth) / 2, HEIGHT / 2 + 20);
 	}
-
 
 	@Override
 	protected void paintComponent(Graphics gPanel) {
@@ -258,7 +187,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		if (input == KeyEvent.VK_S)
 			player.setDown(false);
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 		int mouseX = e.getX();
@@ -271,11 +200,10 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
 	}
 
-	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

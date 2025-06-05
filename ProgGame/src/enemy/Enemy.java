@@ -1,11 +1,11 @@
-package enemies;
+package enemy;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
-import main.GamePanel;
+import gameloop.GamePanel;
 import player.Player;
 
 public abstract class Enemy {

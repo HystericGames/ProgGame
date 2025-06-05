@@ -1,5 +1,7 @@
-package enemies;
+package gameloop;
 
+import enemy.Enemy;
+import enemy.Infantry;
 import player.Player;
 
 public class EnemyHandler {
@@ -15,7 +17,7 @@ public class EnemyHandler {
 
 
 
-	public Enemy createRandomEnemy() {
+	protected Enemy createRandomEnemy() {
 		int type = (int) (Math.random() * 3) + 1; 
 		int rank = (int) (Math.random() * 2) + 1; 
 
