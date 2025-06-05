@@ -97,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 		if (enemies.isEmpty()) {
 			waveNumber++;
-			spawnEnemies(waveNumber * 3);
+			spawnEnemies(waveNumber * 2);
 		}
 
 		CollisionHandler.handleEnemyCollisions(enemies);
@@ -174,18 +174,8 @@ public class GamePanel extends JPanel implements Runnable {
 		return WIDTH;
 	}
 
-	public static void setWIDTH(int wIDTH) {
-		WIDTH = wIDTH;
-	}
-
 	public static int getHEIGHT() {
 		return HEIGHT;
 	}
-
-	public static void setHEIGHT(int hEIGHT) {
-		HEIGHT = hEIGHT;
-	}
-	
-	
 
 }

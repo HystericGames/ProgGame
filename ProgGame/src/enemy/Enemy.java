@@ -14,7 +14,7 @@ public abstract class Enemy {
     protected double dx, dy;
     protected int width, height;
     protected Color enemyColor;
-    protected Color enemyBoundaryColor;
+    private Color enemyBoundaryColor;
     protected int speed;
     
     protected int type;
@@ -24,6 +24,8 @@ public abstract class Enemy {
     protected int health;
     
     protected int damage;
+    
+    protected int knockback;
 
     private Player player;
 
@@ -36,6 +38,8 @@ public abstract class Enemy {
         this.height = 40;
         
         this.dead = false;
+        
+        this.enemyBoundaryColor = Color.DARK_GRAY;
 
         // Random spawn
         int side = (int)(Math.random() * 4);
@@ -82,6 +86,9 @@ public abstract class Enemy {
 
         g.setColor(enemyColor);
         g.fillRect(-width / 2, -height / 2, width, height);
+        
+        g.setColor(enemyBoundaryColor);
+		g.drawRect(-width / 2, -height / 2, width, height);
 
         g.setTransform(old);
     }
@@ -152,6 +159,14 @@ public abstract class Enemy {
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+
+	public int getKnockback() {
+		return knockback;
+	}
+
+	public void setKnockback(int knockback) {
+		this.knockback = knockback;
 	}
 	
 	

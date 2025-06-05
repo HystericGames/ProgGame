@@ -40,15 +40,9 @@ public class CollisionHandler {
                 if (bulletRect.intersects(e.getBounds())) {
                     e.setHealth(e.getHealth() - 1);
 
-                    double knockback = switch (e.getType()) {
-                        case 1 -> 50;
-                        case 2 -> 30;
-                        case 3 -> 10;
-                        default -> 5;
-                    };
                     double angle = bullet.getAngle();
-                    e.setX(e.getX() + Math.cos(angle) * knockback);
-                    e.setY(e.getY() + Math.sin(angle) * knockback);
+                    e.setX(e.getX() + Math.cos(angle) * e.getKnockback());
+                    e.setY(e.getY() + Math.sin(angle) * e.getKnockback());
 
                     removeBullet = true;
 
