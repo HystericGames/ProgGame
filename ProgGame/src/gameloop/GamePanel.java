@@ -1,7 +1,6 @@
 package gameloop;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ import enemy.*;
 import player.Player;
 import player.Weapon;
 
-public class GamePanel extends JPanel implements KeyListener, Runnable, MouseListener {
+public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -452762559258401813L;
 	public static int WIDTH = 1080;
@@ -38,8 +37,6 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true);
 		requestFocusInWindow();
-		addKeyListener(this);
-		addMouseListener(this);
 		setBackground(Color.WHITE);
 	}
 
@@ -55,11 +52,14 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 		player = new Player();
-		enemies = new ArrayList<Enemy>();
+		enemies = new ArrayList<>();
 		bullets = new ArrayList<>();
 		waveNumber = 0;
-
 		running = true;
+
+		KeyMouseHandler inputHandler = new KeyMouseHandler(player, bullets);
+		addKeyListener(inputHandler);
+		addMouseListener(inputHandler);
 	}
 
 	@Override
@@ -162,66 +162,6 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 		gPanel.drawImage(image, 0, 0, null);
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		int input = e.getKeyCode();
-		if (input == KeyEvent.VK_A)
-			player.setLeft(true);
-		if (input == KeyEvent.VK_D)
-			player.setRight(true);
-		if (input == KeyEvent.VK_W)
-			player.setUp(true);
-		if (input == KeyEvent.VK_S)
-			player.setDown(true);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		int input = e.getKeyCode();
-		if (input == KeyEvent.VK_A)
-			player.setLeft(false);
-		if (input == KeyEvent.VK_D)
-			player.setRight(false);
-		if (input == KeyEvent.VK_W)
-			player.setUp(false);
-		if (input == KeyEvent.VK_S)
-			player.setDown(false);
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		int mouseX = e.getX();
-		int mouseY = e.getY();
-
-		int playerCenterX = player.getX() + player.getWidth() / 2;
-		int playerCenterY = player.getY() + player.getHeight() / 2;
-		double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
-
-		bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
 	public int getScore() {
 		return score;
 	}
@@ -229,5 +169,23 @@ public class GamePanel extends JPanel implements KeyListener, Runnable, MouseLis
 	public void setScore(int score) {
 		this.score = score;
 	}
+
+	public static int getWIDTH() {
+		return WIDTH;
+	}
+
+	public static void setWIDTH(int wIDTH) {
+		WIDTH = wIDTH;
+	}
+
+	public static int getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public static void setHEIGHT(int hEIGHT) {
+		HEIGHT = hEIGHT;
+	}
+	
+	
 
 }

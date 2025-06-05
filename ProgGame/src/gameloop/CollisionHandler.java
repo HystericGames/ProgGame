@@ -56,7 +56,8 @@ public class CollisionHandler {
                         e.setDead(true);
                         enemies.remove(j);
                         if (e.getType() == 1) scoreGained += 1;
-                        else if (e.getType() == 3) scoreGained += 3;
+                        else if (e.getType() == 2) scoreGained += 2;
+                        else scoreGained +=3;
                         j--;
                     }
 
