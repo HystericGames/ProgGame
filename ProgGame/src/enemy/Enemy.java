@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
-import gameloop.GamePanel;
+import main.GamePanel;
 import player.Player;
 
 public abstract class Enemy {

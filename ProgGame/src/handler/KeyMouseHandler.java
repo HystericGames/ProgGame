@@ -3,6 +3,7 @@ package handler;
 import java.awt.event.*;
 import java.util.List;
 
+import main.GamePanel;
 import player.Player;
 import player.Weapon;
 
@@ -10,11 +11,15 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 
 	private Player player;
 	private List<Weapon> bullets;
+	private GamePanel game;
 
-	public KeyMouseHandler(Player player, List<Weapon> bullets) {
+
+	public KeyMouseHandler(GamePanel game, Player player, List<Weapon> bullets) {
+		this.game = game;
 		this.player = player;
 		this.bullets = bullets;
 	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -44,15 +49,19 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int mouseX = e.getX();
-		int mouseY = e.getY();
+		if (!game.isInShop()) {
+			int mouseX = e.getX();
+			int mouseY = e.getY();
 
-		int playerCenterX = player.getX() + player.getWidth() / 2;
-		int playerCenterY = player.getY() + player.getHeight() / 2;
-		double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
+			int playerCenterX = player.getX() + player.getWidth() / 2;
+			int playerCenterY = player.getY() + player.getHeight() / 2;
+			double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
 
-		bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
+			bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
+		}
 	}
+
+
 
 	@Override
 	public void keyTyped(KeyEvent e) {

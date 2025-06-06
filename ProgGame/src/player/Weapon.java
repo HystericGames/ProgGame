@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import gameloop.GamePanel;
+import main.GamePanel;
 
 public class Weapon {
 	private int x;

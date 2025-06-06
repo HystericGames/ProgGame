@@ -1,4 +1,4 @@
-package gameloop;
+package main;
 
 import javax.swing.JFrame;
 

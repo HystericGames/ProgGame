@@ -1,7 +1,7 @@
 package handler;
 
 import enemy.Enemy;
-import gameloop.GamePanel;
+import main.GamePanel;
 import player.Player;
 import player.Weapon;
 
