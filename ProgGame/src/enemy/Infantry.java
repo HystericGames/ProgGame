@@ -50,7 +50,7 @@ public class Infantry extends Enemy {
 				health = 5;
 				enemyColor = Color.BLUE.darker().darker();
 			} else if (rank == 2) {
-				health = 5;
+				health = 6;
 				enemyColor = Color.BLUE.darker().darker();
 			}
 
