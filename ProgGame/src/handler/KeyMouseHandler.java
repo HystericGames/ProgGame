@@ -3,6 +3,8 @@ package handler;
 import java.awt.event.*;
 import java.util.List;
 
+import javax.swing.Timer;
+
 import main.GamePanel;
 import player.Player;
 import player.Weapon;
@@ -13,13 +15,16 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 	private List<Weapon> bullets;
 	private GamePanel game;
 
+	private boolean mouseHeld = false;
+	private Timer fireTimer;
+	private long lastShotTime = 0;
+
 
 	public KeyMouseHandler(GamePanel game, Player player, List<Weapon> bullets) {
 		this.game = game;
 		this.player = player;
 		this.bullets = bullets;
 	}
-
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -50,6 +55,39 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (!game.isInShop()) {
+			mouseHeld = true;
+			tryFireBullet(e);
+			startFiringLoop(e);
+		}
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		mouseHeld = false;
+		if (fireTimer != null) {
+			fireTimer.stop();
+		}
+	}
+	
+	private void startFiringLoop(MouseEvent e) {
+		int delay = getFireDelayForLevel(player.getWeaponUpgradeLevel());
+
+		fireTimer = new Timer(delay, evt -> {
+			if (!mouseHeld || game.isInShop()) {
+				fireTimer.stop();
+				return;
+			}
+			tryFireBullet(e);
+		});
+		fireTimer.start();
+	}
+	
+	private void tryFireBullet(MouseEvent e) {
+		long now = System.currentTimeMillis();
+		int delay = getFireDelayForLevel(player.getWeaponUpgradeLevel());
+
+		if (now - lastShotTime >= delay) {
 			int mouseX = e.getX();
 			int mouseY = e.getY();
 
@@ -57,11 +95,21 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 			int playerCenterY = player.getY() + player.getHeight() / 2;
 			double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
 
-			bullets.add(new Weapon(angle, playerCenterX, playerCenterY));
+			bullets.add(new Weapon(angle, playerCenterX, playerCenterY, player.getWeaponUpgradeLevel()));
+			lastShotTime = now;
 		}
 	}
 
-
+	private int getFireDelayForLevel(int level) {
+		return switch (level) {
+		case 1 -> 1000; // Winchester M1886
+		case 2 -> 1000; // Enfield M1917 Rifle
+		case 3 -> 500; // RSC M1917
+		case 4 -> 200; // Colt–Vickers M1915 MG
+		case 5 -> 100; // BAR M1918
+		default -> 1000;
+		};
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -69,10 +117,6 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
 	}
 
 	@Override

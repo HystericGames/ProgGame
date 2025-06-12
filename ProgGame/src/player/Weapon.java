@@ -20,22 +20,26 @@ public class Weapon {
 	private int speed;
 
 	public double angle;
+	
+	private int damage;
 
 	private Color bulletColor;
 	private Color bulletBoundaryColor;
 
-	public Weapon(double angle, int x, int y) {
-		this.x = x;
-		this.y = y;
-		speed = 10;
-		this.angle = angle;
-		dx = Math.cos(angle) * speed;
-		dy = Math.sin(angle) * speed;
-		width = 20;
-		height = 5;
-		bulletColor = Color.ORANGE;
-		bulletBoundaryColor = bulletColor.darker().darker();
+	public Weapon(double angle, int x, int y, int weaponLevel) {
+	    this.x = x;
+	    this.y = y;
+	    speed = 10;
+	    this.angle = angle;
+	    setDamage(weaponLevel);
+	    dx = Math.cos(angle) * speed;
+	    dy = Math.sin(angle) * speed;
+	    width = 20;
+	    height = 5;
+	    bulletColor = Color.ORANGE;
+	    bulletBoundaryColor = bulletColor.darker().darker();
 	}
+
 
 	public int getx() {
 		return x;
@@ -84,6 +88,23 @@ public class Weapon {
 	public Rectangle getBounds() {
 	    return new Rectangle(x - width / 2, y - height / 2, width, height);
 	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int level) {
+		switch (level) {
+	        case 1 -> this.damage = 1;
+	        case 2 -> this.damage = 2;
+	        case 3 -> this.damage = 2;
+	        case 4 -> this.damage = 2;
+	        case 5 -> this.damage = 3;
+        default -> this.damage = 1;
+		};
+	}
+
+
 
 
 }

@@ -22,6 +22,9 @@ public class Player{
 	
 	private int health;
     private int maxHealth;
+    
+    private int weaponUpgradeLevel = 1;
+
 
 
     public Player() {
@@ -193,6 +196,30 @@ public class Player{
 	public boolean isDead() {
 		return health <= 0;
 	}
+
+	public int getWeaponUpgradeLevel() {
+		return weaponUpgradeLevel;
+	}
+	
+	public int getWeaponDamage() {
+		int temp;
+		switch (weaponUpgradeLevel) {
+	        case 1 -> temp=1;
+	        case 2 -> temp=2;
+	        case 3 -> temp=2;
+	        case 4 -> temp=2;
+	        case 5 -> temp=3;
+	    default -> temp=1;
+		};
+		return temp;
+	}
+
+	public void upgradeWeapon() {
+	    if (weaponUpgradeLevel < 5) {
+	        weaponUpgradeLevel++;
+	    }
+	}
+
     
 	
 

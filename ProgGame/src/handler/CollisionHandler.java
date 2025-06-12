@@ -39,7 +39,7 @@ public class CollisionHandler {
             for (int j = 0; j < enemies.size(); j++) {
                 Enemy e = enemies.get(j);
                 if (bulletRect.intersects(e.getBounds())) {
-                    e.setHealth(e.getHealth() - 1);
+                    e.setHealth(e.getHealth() - bullet.getDamage());
 
                     double angle = bullet.getAngle();
                     e.setX(e.getX() + Math.cos(angle) * e.getKnockback());
