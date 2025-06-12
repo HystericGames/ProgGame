@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setFocusable(true);
         requestFocusInWindow();
-        setLayout(null); // allow absolute positioning of shop panel
+        setLayout(null);
         setBackground(Color.WHITE);
     }
 
@@ -68,10 +68,8 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseListener(inputHandler);
         addMouseMotionListener(inputHandler);
 
-
-        // Add Swing-based ShopPanel
         shopPanel = new ShopPanel(this, player);
-        shopPanel.setBounds(200, 100, 680, 500); // position + size
+        shopPanel.setBounds(200, 100, 680, 500); 
         shopPanel.setVisible(false);
         add(shopPanel);
     }
@@ -108,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (enemies.isEmpty()) {
                 inShop = true;
-                shopPanel.setVisible(true); // show the Swing shop
+                shopPanel.setVisible(true); 
             }
 
             for (int i = 0; i < bullets.size(); i++) {
@@ -182,12 +180,12 @@ public class GamePanel extends JPanel implements Runnable {
         shopPanel.setVisible(false);
     }
 
-    public void increaseKillCount(int value) {
+    public void changeKillCount(int value) {
         kills += value;
         if (kills < 0) kills = 0;
     }
 
-    public void increaseMedalCount(int value) {
+    public void changeMedalCount(int value) {
         medals += value;
         if (medals < 0) medals = 0;
     }

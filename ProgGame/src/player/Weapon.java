@@ -71,11 +71,9 @@ public class Weapon {
 		g.translate(x, y);
 		g.rotate(angle);
 
-		// Set bullet style
 		g.setStroke(new BasicStroke(2));
 		g.setColor(bulletColor);
 
-		// Mitte des Spielers als Start
 		g.fillRect(-width / 2, -height / 2, width, height);
 
 		g.setColor(bulletBoundaryColor);

@@ -53,12 +53,10 @@ public class CollisionHandler {
                         
                         panel.increaseKillCount();
 
-                        // Score logic
                         if (e.getType() == 1) scoreGained += 1;
                         else if (e.getType() == 2) scoreGained += 2;
                         else scoreGained += 3;
 
-                        // Medal logic
                         if (e.getType() == 3 && e.getRank() == 2) {
                             panel.increaseMedalCount();
                         }

@@ -38,7 +38,7 @@ public class ShopPanel extends JPanel {
         addButton("Reeinforce Division (2 Kills)", () -> {
             if (game.getKills() >= 2 && player.getHealth() < player.getMaxHealth()) {
                 player.setHealth(player.getHealth() + 1);
-                game.increaseKillCount(-2);
+                game.changeKillCount(-2);
                 updateStats();
             }
         });
@@ -46,7 +46,7 @@ public class ShopPanel extends JPanel {
         addButton("Speed Upgrade (5 Kills)", () -> {
             if (game.getKills() >= 5 && player.getSpeed() < 10) {
                 player.setSpeed(player.getSpeed() + 1);
-                game.increaseKillCount(-5);
+                game.changeKillCount(-5);
                 updateStats();
             }
         });
@@ -54,7 +54,7 @@ public class ShopPanel extends JPanel {
         addButton("Division Upgrade (2 Medals)", () -> {
             if (game.getMedals() >= 2) {
                 player.setMaxHealth(player.getMaxHealth() + 1);
-                game.increaseMedalCount(-2);
+                game.changeMedalCount(-2);
                 updateStats();
             }
         });
@@ -62,7 +62,7 @@ public class ShopPanel extends JPanel {
         addButton("Weapon Upgrade (5 Medals)", () -> {
             if (game.getMedals() >= 5 && player.getWeaponUpgradeLevel() < 5) {
                 player.upgradeWeapon();
-                game.increaseMedalCount(-5);
+                game.changeMedalCount(-5);
                 updateStats();
             }
         });

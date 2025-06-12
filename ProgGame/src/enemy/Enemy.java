@@ -41,7 +41,6 @@ public abstract class Enemy {
         
         this.enemyBoundaryColor = Color.DARK_GRAY;
 
-        // Random spawn
         int side = (int)(Math.random() * 4);
         switch (side) {
             case 0:
