@@ -103,10 +103,10 @@ public class KeyMouseHandler implements KeyListener, MouseListener, MouseMotionL
 
 	private int getFireDelayForLevel(int level) {
 		return switch (level) {
-		case 1 -> 1000; // Winchester M1886
-		case 2 -> 1000; // Enfield M1917 Rifle
-		case 3 -> 500; // RSC M1917
-		case 4 -> 200; // Colt–Vickers M1915 MG
+		case 1 -> 500; // Winchester M1886
+		case 2 -> 500; // Enfield M1917 Rifle
+		case 3 -> 250; // RSC M1917
+		case 4 -> 100; // Colt–Vickers M1915 MG
 		case 5 -> 100; // BAR M1918
 		default -> 1000;
 		};

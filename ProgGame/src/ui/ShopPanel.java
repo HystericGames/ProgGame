@@ -60,7 +60,7 @@ public class ShopPanel extends JPanel {
         });
         
         addButton("Weapon Upgrade (5 Medals)", () -> {
-            if (game.getMedals() >= 0 && player.getWeaponUpgradeLevel() < 5) {
+            if (game.getMedals() >= 5 && player.getWeaponUpgradeLevel() < 5) {
                 player.upgradeWeapon();
                 game.increaseMedalCount(-5);
                 updateStats();
