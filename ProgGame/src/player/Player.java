@@ -6,80 +6,85 @@ import java.awt.Rectangle;
 
 import main.GamePanel;
 
-public class Player{
-    private int x, y, width, height;
-    private Color color;
-    
-    private boolean left;
+public class Player {
+	private int x, y, width, height;
+	private Color color;
+
+	private boolean left;
 	private boolean right;
 	private boolean up;
 	private boolean down;
-	
+
 	private int speed;
 
 	private int dx;
 	private int dy;
-	
+
 	private int health;
-    private int maxHealth;
-    
-    private int weaponUpgradeLevel = 1;
+	private int maxHealth;
 
+	private int weaponUpgradeLevel = 1;
 
+	public Player() {
+		x = GamePanel.WIDTH / 2;
+		y = GamePanel.HEIGHT / 2;
+		width = 50;
+		height = 50;
+		color = Color.BLACK;
+		speed = 5;
 
-    public Player() {
-    	x = GamePanel.WIDTH/2;
-	    y = GamePanel.HEIGHT/2;
-        width = 50;
-        height = 50;
-        color = Color.BLACK;
-        speed = 6;
-        
-        maxHealth = 10;
-        health = maxHealth;
-    }
+		maxHealth = 10;
+		health = maxHealth;
+	}
 
-    public void draw(Graphics2D g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
+	public void draw(Graphics2D g) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
 
-        g.setColor(Color.GRAY);
-        g.fillRect(x, y - 15, width, 8);
+		g.setColor(Color.GRAY);
+		g.fillRect(x, y - 15, width, 8);
 
-        g.setColor(Color.RED);
-        int healthBarWidth = (int) ((health / (double) maxHealth) * width);
-        g.fillRect(x, y - 15, healthBarWidth, 8);
-        
-        g.setColor(Color.DARK_GRAY);
-        g.drawLine(x, y, x + width, y + height);
-        g.drawLine(x + width, y, x, y + height);
-    }
+		g.setColor(Color.RED);
+		int healthBarWidth = (int) ((health / (double) maxHealth) * width);
+		g.fillRect(x, y - 15, healthBarWidth, 8);
 
+		g.setColor(Color.DARK_GRAY);
+		g.drawLine(x, y, x + width, y + height);
+		g.drawLine(x + width, y, x, y + height);
+	}
 
-    
-    public void update() {
-    	if(left) dx = -speed;
-		if(right) dx = speed;
-		if(up) dy = -speed;
-		if(down) dy = speed;
-		x+=dx;
-		y+=dy;
-		if(x < 3) x = 3;
-		if(y < 3) y = 3;
-		if(x > GamePanel.WIDTH - 50-3) x = GamePanel.WIDTH - 50-3;
-		if(y > GamePanel.HEIGHT - 50-3) y = GamePanel.HEIGHT - 50-3;
-		dx=0;
-		dy=0;
-    }
-    
-    public void damage(int amount) {
-    	health -= amount;
-        if (health < 0) health = 0;
-    }
-    
-    public Rectangle getBounds() {
-        return new Rectangle((int) getX(), (int) getY(), width, height);
-    }
+	public void update() {
+		if (left)
+			dx = -speed;
+		if (right)
+			dx = speed;
+		if (up)
+			dy = -speed;
+		if (down)
+			dy = speed;
+		x += dx;
+		y += dy;
+		if (x < 3)
+			x = 3;
+		if (y < 3)
+			y = 3;
+		if (x > GamePanel.WIDTH - 50 - 3)
+			x = GamePanel.WIDTH - 50 - 3;
+		if (y > GamePanel.HEIGHT - 50 - 3)
+			y = GamePanel.HEIGHT - 50 - 3;
+		dx = 0;
+		dy = 0;
+	}
+
+	public void damage(int amount) {
+		health -= amount;
+		if (health < 0)
+			health = 0;
+	}
+
+	public Rectangle getBounds() {
+		return new Rectangle((int) getX(), (int) getY(), width, height);
+	}
 
 	public int getX() {
 		return x;
@@ -200,27 +205,25 @@ public class Player{
 	public int getWeaponUpgradeLevel() {
 		return weaponUpgradeLevel;
 	}
-	
+
 	public int getWeaponDamage() {
 		int temp;
 		switch (weaponUpgradeLevel) {
-	        case 1 -> temp=1;
-	        case 2 -> temp=2;
-	        case 3 -> temp=2;
-	        case 4 -> temp=2;
-	        case 5 -> temp=3;
-	    default -> temp=1;
-		};
+		case 1 -> temp = 1;
+		case 2 -> temp = 2;
+		case 3 -> temp = 2;
+		case 4 -> temp = 2;
+		case 5 -> temp = 3;
+		default -> temp = 1;
+		}
+		;
 		return temp;
 	}
 
 	public void upgradeWeapon() {
-	    if (weaponUpgradeLevel < 5) {
-	        weaponUpgradeLevel++;
-	    }
+		if (weaponUpgradeLevel < 5) {
+			weaponUpgradeLevel++;
+		}
 	}
-
-    
-	
 
 }

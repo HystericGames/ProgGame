@@ -9,7 +9,7 @@ import main.GamePanel;
 import player.Player;
 import player.Weapon;
 
-public class KeyMouseHandler implements KeyListener, MouseListener {
+public class KeyMouseHandler implements KeyListener, MouseListener, MouseMotionListener {
 
 	private Player player;
 	private List<Weapon> bullets;
@@ -18,6 +18,9 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 	private boolean mouseHeld = false;
 	private Timer fireTimer;
 	private long lastShotTime = 0;
+	
+	private int currentMouseX = 0;
+	private int currentMouseY = 0;
 
 
 	public KeyMouseHandler(GamePanel game, Player player, List<Weapon> bullets) {
@@ -88,17 +91,15 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 		int delay = getFireDelayForLevel(player.getWeaponUpgradeLevel());
 
 		if (now - lastShotTime >= delay) {
-			int mouseX = e.getX();
-			int mouseY = e.getY();
-
 			int playerCenterX = player.getX() + player.getWidth() / 2;
 			int playerCenterY = player.getY() + player.getHeight() / 2;
-			double angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
+			double angle = Math.atan2(currentMouseY - playerCenterY, currentMouseX - playerCenterX);
 
 			bullets.add(new Weapon(angle, playerCenterX, playerCenterY, player.getWeaponUpgradeLevel()));
 			lastShotTime = now;
 		}
 	}
+
 
 	private int getFireDelayForLevel(int level) {
 		return switch (level) {
@@ -125,5 +126,17 @@ public class KeyMouseHandler implements KeyListener, MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		currentMouseX = e.getX();
+		currentMouseY = e.getY();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		currentMouseX = e.getX();
+		currentMouseY = e.getY();
 	}
 }

@@ -60,7 +60,7 @@ public class ShopPanel extends JPanel {
         });
         
         addButton("Weapon Upgrade (5 Medals)", () -> {
-            if (game.getMedals() >= 5 && player.getWeaponUpgradeLevel() < 5) {
+            if (game.getMedals() >= 0 && player.getWeaponUpgradeLevel() < 5) {
                 player.upgradeWeapon();
                 game.increaseMedalCount(-5);
                 updateStats();
@@ -123,12 +123,12 @@ public class ShopPanel extends JPanel {
     
     private String getWeaponName(int level) {
         return switch (level) {
-            case 1 -> "Winchester M1886";
+            case 1 -> "Winchester M1886 Rifle";
             case 2 -> "Enfield M1917 Rifle";
-            case 3 -> "RSC M1917";
-            case 4 -> "Colt–Vickers M1915 MG";
-            case 5 -> "BAR M1918";
-            default -> "Unknown";
+            case 3 -> "RSC M1917 Semi-Automatic Rifle";
+            case 4 -> "Colt–Vickers M1915 Machine Gun";
+            case 5 -> "BAR M1918 Assault Rifle";
+            default -> "Winchester M1886 Rifle";
         };
     }
 

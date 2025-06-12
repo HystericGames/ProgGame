@@ -66,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
         KeyMouseHandler inputHandler = new KeyMouseHandler(this, player, bullets);
         addKeyListener(inputHandler);
         addMouseListener(inputHandler);
+        addMouseMotionListener(inputHandler);
+
 
         // Add Swing-based ShopPanel
         shopPanel = new ShopPanel(this, player);
