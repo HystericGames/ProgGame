@@ -1,8 +1,8 @@
-package ui;
+package main;
 
 import javax.swing.*;
 import java.awt.*;
-import main.GamePanel;
+
 import player.Player;
 
 public class ShopPanel extends JPanel {

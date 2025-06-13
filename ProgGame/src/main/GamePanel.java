@@ -9,7 +9,6 @@ import enemy.*;
 import handler.*;
 import player.Player;
 import player.Weapon;
-import ui.ShopPanel;
 
 public class GamePanel extends JPanel implements Runnable {
 
