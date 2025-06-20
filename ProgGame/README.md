@@ -1,3 +1,5 @@
+Diese Datei bitte im PlainTextEditor öffnen!
+
 ### Square Fighter: The Last Divison
 Kämpfe durch Wellen von Rechteckdivisionen, als letzte und umzingelte Division der Quadratenarmee. Verbessere deine Waffen, hole Verstärkung und überlebe so lange wie möglich!
 
@@ -52,5 +54,10 @@ Typ     Name                    Schaden     Geschwindigkeit     Gesundheit
 3       Schwerer Panzer         5           1                   8/10
 
 ## Vorraussetzungen 
-- SQLite JDBC Driver 3.50.1.0 (https://github.com/xerial/sqlite-jdbc/releases)
+- SQLite JDBC Driver 3.50.1.0 JAR-File (https://github.com/xerial/sqlite-jdbc/releases)
+	1. Rechtsclick auf das Projekt
+	2. Build Path
+	3. Add External Archives
+	4. SQLite JDBC Driver JAR-File auswählen
+	5. Finish
 - Eclipse IDE (Es können Probleme mit IntelliJ auftreten)
