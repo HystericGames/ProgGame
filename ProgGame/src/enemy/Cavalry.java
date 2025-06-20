@@ -5,7 +5,6 @@ import java.awt.Color;
 import player.Player;
 
 public class Cavalry extends Enemy {
-
 	public Cavalry(int type, int rank, Player player) {
 		super(type, rank, player);
 		this.width = 30;

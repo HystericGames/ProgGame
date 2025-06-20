@@ -8,8 +8,8 @@ import java.awt.geom.AffineTransform;
 import main.GamePanel;
 import player.Player;
 
-public abstract class Enemy {
-    private double x;
+public abstract class Enemy{
+	private double x;
 	private double y;
     protected double dx, dy;
     protected int width, height;

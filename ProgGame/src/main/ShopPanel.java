@@ -9,7 +9,6 @@ public class ShopPanel extends JPanel {
     private static final long serialVersionUID = 3712616867311097737L;
 
     private Player player;
-    private JLabel healthLabel;
     private JLabel maxHealthLabel;
     private JLabel speedLabel;
     private JLabel weaponLabel;
@@ -51,18 +50,18 @@ public class ShopPanel extends JPanel {
             }
         });
 
-        addButton("Division Upgrade (2 Medals)", () -> {
-            if (game.getMedals() >= 2) {
+        addButton("Division Upgrade (1 Medals)", () -> {
+            if (game.getMedals() >= 1) {
                 player.setMaxHealth(player.getMaxHealth() + 1);
-                game.changeMedalCount(-2);
+                game.changeMedalCount(-1);
                 updateStats();
             }
         });
         
-        addButton("Weapon Upgrade (5 Medals)", () -> {
-            if (game.getMedals() >= 5 && player.getWeaponUpgradeLevel() < 5) {
+        addButton("Weapon Upgrade (3 Medals)", () -> {
+            if (game.getMedals() >= 3 && player.getWeaponUpgradeLevel() < 5) {
                 player.upgradeWeapon();
-                game.changeMedalCount(-5);
+                game.changeMedalCount(-3);
                 updateStats();
             }
         });
@@ -78,16 +77,14 @@ public class ShopPanel extends JPanel {
 
     private void setupStatsPanel() {
         JPanel statsPanel = new JPanel();
-        statsPanel.setLayout(new GridLayout(5, 1, 5, 5));
+        statsPanel.setLayout(new GridLayout(4, 1, 4, 4));
         statsPanel.setOpaque(false);
 
-        healthLabel = createStatLabel();
         maxHealthLabel = createStatLabel();
         speedLabel = createStatLabel();
         weaponLabel = createStatLabel();
         damageLabel = createStatLabel();
 
-        statsPanel.add(healthLabel);
         statsPanel.add(maxHealthLabel);
         statsPanel.add(speedLabel);
         statsPanel.add(weaponLabel);
@@ -105,7 +102,6 @@ public class ShopPanel extends JPanel {
     }
 
     public void updateStats() {
-        healthLabel.setText("Health: " + player.getHealth());
         maxHealthLabel.setText("Max Health: " + player.getMaxHealth());
         speedLabel.setText("Speed: " + player.getSpeed());
         weaponLabel.setText("Weapon: " + getWeaponName(player.getWeaponUpgradeLevel()));

@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import player.Player;
 
-public class Infantry extends Enemy {
+public class Infantry extends Enemy{
 
 	public Infantry(int type, int rank, Player player) {
 		super(type, rank, player);

@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 import main.GamePanel;
 
-public class Player {
+public class Player{
 	private int x, y, width, height;
 	private Color color;
 
@@ -70,8 +70,8 @@ public class Player {
 			y = 3;
 		if (x > GamePanel.WIDTH - 50 - 3)
 			x = GamePanel.WIDTH - 50 - 3;
-		if (y > GamePanel.HEIGHT - 50 - 3)
-			y = GamePanel.HEIGHT - 50 - 3;
+		if (y > GamePanel.HEIGHT - 50 - 25)
+			y = GamePanel.HEIGHT - 50 - 25;
 		dx = 0;
 		dy = 0;
 	}
@@ -225,5 +225,11 @@ public class Player {
 			weaponUpgradeLevel++;
 		}
 	}
+
+	public void setWeaponUpgradeLevel(int weaponUpgradeLevel) {
+		this.weaponUpgradeLevel = weaponUpgradeLevel;
+	}
+	
+	
 
 }

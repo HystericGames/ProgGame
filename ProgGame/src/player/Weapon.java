@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 
 import main.GamePanel;
 
-public class Weapon {
+public class Weapon{
 	private int x;
 	private int y;
 
