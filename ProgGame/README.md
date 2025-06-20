@@ -15,7 +15,7 @@ Kämpfe durch Wellen von Rechteckdivisionen, als letzte und umzingelte Division 
 
 ## Steuerung 
 Bewegung - W,A,S,D
-Schießen - Linke oder Rechte Maustaste
+Schießen - Linke oder Rechte Maustaste (Windows: Rechte Maustaste) 
 Zielen - Bewegen der Maus 
 
 ## Spielen über ein lokales Netzwerk
@@ -52,5 +52,5 @@ Typ     Name                    Schaden     Geschwindigkeit     Gesundheit
 3       Schwerer Panzer         5           1                   8/10
 
 ## Vorraussetzungen 
-- Falls Probleme mit der Datenbank auftreten: SQLLite JDBC 3.50.1.0 (https://github.com/xerial/sqlite-jdbc/releases)
+- SQLite JDBC Driver 3.50.1.0 (https://github.com/xerial/sqlite-jdbc/releases)
 - Eclipse IDE (Es können Probleme mit IntelliJ auftreten)
